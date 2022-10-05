@@ -11,27 +11,58 @@ import SafariServices
 
 class DashBoardViewController: UIViewController {
     
-    @IBOutlet weak var dashBoardTableView: UITableView!
+    private let buttonTapToSearch: UIButton! = {
+        let buttonTapToSearch = UIButton()
+        
+        buttonTapToSearch.translatesAutoresizingMaskIntoConstraints = false
+        buttonTapToSearch.setTitle("Tap To Search", for: .normal)
+        buttonTapToSearch.titleLabel?.font = .systemFont(ofSize: 24, weight: .bold)
+        
+        return buttonTapToSearch
+    }()
+    
+    private let dashBoardTableView: UITableView! = {
+        let dashBoardTableView = UITableView()
+        
+        dashBoardTableView.translatesAutoresizingMaskIntoConstraints = false
+        dashBoardTableView.backgroundColor = .white
+       
+        return dashBoardTableView
+    }()
     
     var articleList: [ArticleAPIData] = []
     var selectArticle: ArticleAPIData?
     let defaults = UserDefaults.standard
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.addSubview(buttonTapToSearch)
+        view.addSubview(dashBoardTableView)
+        
+        NSLayoutConstraint.activate([
+            buttonTapToSearch.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            buttonTapToSearch.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            dashBoardTableView.topAnchor.constraint(equalTo: buttonTapToSearch.bottomAnchor, constant: 20),
+            dashBoardTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            dashBoardTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            dashBoardTableView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor)
+        ])
+        
         dashBoardTableView.dataSource = self
         dashBoardTableView.delegate = self
         dashBoardTableView.register(UINib(nibName: K.CustomTableCell.dashBoardCell, bundle: nil), forCellReuseIdentifier:  K.CustomTableCell.dashBoardCell)
-        }
+        
+        buttonTapToSearch.addTarget(self, action: #selector(tapToSearch), for: .touchUpInside)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.articleList = loadLocal()
     }
     
-    @IBAction func tapTpSearch(_ sender: UIButton) {
-        performSegue(withIdentifier: K.Segue.goToSearch, sender: self)
+    @objc func tapToSearch() {
+        performSegue(withIdentifier: K.Segue.goToSearch, sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,14 +89,15 @@ class DashBoardViewController: UIViewController {
     
     func loadLocal() -> [ArticleAPIData] {
         guard let encodeData = defaults.array(forKey: K.KeyDataLocal.ArticleList) as? [Data] else {
-           return []
+            return []
         }
         
         let encodeArticleList = encodeData.map { try! JSONDecoder().decode(ArticleAPIData.self, from: $0)}
         
- 
+        
         return encodeArticleList
     }
+    
     
 }
 
@@ -76,7 +108,7 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return articleList.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = dashBoardTableView.dequeueReusableCell(withIdentifier: K.CustomTableCell.dashBoardCell, for: indexPath) as? DashBoardTableViewCell {
             let article = articleList[indexPath.row]
@@ -85,20 +117,20 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
             dateFormatter.locale = Locale(identifier: "TH")
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             let date = dateFormatter.date(from: article.publishedAt!)
-            
+
             if let date = date {
                 dateFormatter.dateFormat = "dd MMM yyyy"
                 let resultDate = dateFormatter.string(from: date)
-                
+
                 cell.date.text = resultDate
             }
-            
+
             cell.titleNews.text = article.title ?? ""
             cell.descriptionNews.text = article.description ?? ""
             cell.urlSource = article.url
             cell.delegate = self
-            
-            
+
+
             if let imageURL = URL(string: article.urlToImage ?? "") {
                 let task = URLSession.shared.dataTask(with: imageURL) { data, response, error in
                     guard let data = data, error == nil else {
@@ -108,22 +140,21 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
                         cell.imageNews.image = UIImage(data: data)
                     }
                 }
-                
                 task.resume()
             }
-            
+
+
             return cell
-            
-            
+
+
         } else {
             return UITableViewCell()
         }
-        
+
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectArticle = articleList[indexPath.row]
-        print("selectArticle \(selectArticle)")
         self.selectArticle = selectArticle
 
         performSegue(withIdentifier: K.Segue.goToDetail, sender: self)
@@ -136,7 +167,6 @@ extension DashBoardViewController: HistoryDelegate {
     func updateArticleList(articleList: [ArticleAPIData]) {
         self.articleList = articleList
         saveToLocal(articleList)
-        
         dashBoardTableView.reloadData()
     }
 }

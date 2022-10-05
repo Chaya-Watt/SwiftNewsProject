@@ -12,7 +12,7 @@ protocol NewsAPICallDelegate {
 }
 
 struct NewsAPICall {
-    let newsURL = "https://newsapi.org/v2/everything?from=2022-09-04&sortBy=publishedAt&apiKey=7d785e8a702740a5a85fa236095ec611"
+    let newsURL = "https://newsapi.org/v2/everything?sortBy=publishedAt&apiKey=7d785e8a702740a5a85fa236095ec611"
     
     var delegate: NewsAPICallDelegate?
     
