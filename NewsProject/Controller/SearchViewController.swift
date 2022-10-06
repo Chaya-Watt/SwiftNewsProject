@@ -13,8 +13,26 @@ protocol HistoryDelegate {
 
 class SearchViewController: UIViewController {
     
-    @IBOutlet weak var searchNews: UITextField!
-    @IBOutlet weak var historyListTable: UITableView!
+    private let searchFieldNews: UITextField! = {
+        let searchFieldNews = UITextField()
+        
+        searchFieldNews.translatesAutoresizingMaskIntoConstraints = false
+        searchFieldNews.placeholder = "Search News"
+        searchFieldNews.font = .systemFont(ofSize: 20)
+        searchFieldNews.backgroundColor = .white
+        searchFieldNews.borderStyle = .roundedRect
+        
+        return searchFieldNews
+    }()
+    
+    private let historyListTable: UITableView = {
+        let historyListTable = UITableView()
+        
+        historyListTable.translatesAutoresizingMaskIntoConstraints = false
+        historyListTable.backgroundColor = .white
+        
+        return historyListTable
+    }()
     
     let defaults = UserDefaults.standard
     
@@ -26,8 +44,22 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(searchFieldNews)
+        view.addSubview(historyListTable)
         
-        searchNews.delegate = self
+        NSLayoutConstraint.activate([
+            searchFieldNews.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            searchFieldNews.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+            searchFieldNews.heightAnchor.constraint(equalToConstant: 50),
+            searchFieldNews.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            historyListTable.topAnchor.constraint(equalTo: searchFieldNews.bottomAnchor, constant:  20),
+            historyListTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            historyListTable.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+            historyListTable.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        searchFieldNews.delegate = self
         historyListTable.dataSource = self
         historyListTable.delegate = self
         newsAPI.delegate = self
@@ -68,7 +100,7 @@ extension SearchViewController: UITextFieldDelegate {
             return false
         }
         newsAPI.fetchNews(searchNews: wrapTextField)
-        searchNews.text = ""
+        searchFieldNews.text = ""
         return true
     }
 }
@@ -80,18 +112,20 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return historyList.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = historyListTable.dequeueReusableCell(withIdentifier: K.CustomTableCell.historyCell, for: indexPath) as! HistoryTableViewCell
         cell.historyName.text = historyList[indexPath.row].name
         cell.totalNews.text = String(historyList[indexPath.row].totalResults)
-        
+        cell.separatorInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        cell.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectHistory = historyList[indexPath.row]
-                
+
         delegate?.updateArticleList(articleList: selectHistory.articles)
         navigationController?.popViewController(animated: true)
         dismiss(animated: true,completion: nil)
@@ -104,10 +138,10 @@ extension SearchViewController: NewsAPICallDelegate {
     func updateHistoryTableView(history: HistoryModel) {
         self.historyList.append(history)
         saveToLocal(historyList)
-        
+
         DispatchQueue.main.async {
             self.historyListTable.reloadData()
         }
     }
-    
+
 }

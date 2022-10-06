@@ -129,6 +129,8 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
             cell.descriptionNews.text = article.description ?? ""
             cell.urlSource = article.url
             cell.delegate = self
+            cell.separatorInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+            cell.layer.cornerRadius = 10
 
 
             if let imageURL = URL(string: article.urlToImage ?? "") {
