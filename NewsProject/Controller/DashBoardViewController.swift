@@ -7,25 +7,27 @@
 
 import UIKit
 import SafariServices
+import SnapKit
 
 
 class DashBoardViewController: UIViewController {
     
-    private let buttonTapToSearch: UIButton! = {
+    private let buttonTapToSearch: UIButton = {
         let buttonTapToSearch = UIButton()
         
-        buttonTapToSearch.translatesAutoresizingMaskIntoConstraints = false
+//        buttonTapToSearch.translatesAutoresizingMaskIntoConstraints = false
         buttonTapToSearch.setTitle("Tap To Search", for: .normal)
         buttonTapToSearch.titleLabel?.font = .systemFont(ofSize: 24, weight: .bold)
-        
+                
         return buttonTapToSearch
     }()
     
     private let dashBoardTableView: UITableView! = {
         let dashBoardTableView = UITableView()
         
-        dashBoardTableView.translatesAutoresizingMaskIntoConstraints = false
-        dashBoardTableView.backgroundColor = .white
+//        dashBoardTableView.translatesAutoresizingMaskIntoConstraints = false
+        dashBoardTableView.separatorStyle = .none
+        dashBoardTableView.showsVerticalScrollIndicator = false
        
         return dashBoardTableView
     }()
@@ -33,32 +35,49 @@ class DashBoardViewController: UIViewController {
     var articleList: [ArticleAPIData] = []
     var selectArticle: ArticleAPIData?
     let defaults = UserDefaults.standard
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.addSubview(buttonTapToSearch)
         view.addSubview(dashBoardTableView)
-        
-        NSLayoutConstraint.activate([
-            buttonTapToSearch.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            buttonTapToSearch.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            dashBoardTableView.topAnchor.constraint(equalTo: buttonTapToSearch.bottomAnchor, constant: 20),
-            dashBoardTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            dashBoardTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dashBoardTableView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor)
-        ])
-        
+                
         dashBoardTableView.dataSource = self
         dashBoardTableView.delegate = self
         dashBoardTableView.register(UINib(nibName: K.CustomTableCell.dashBoardCell, bundle: nil), forCellReuseIdentifier:  K.CustomTableCell.dashBoardCell)
         
         buttonTapToSearch.addTarget(self, action: #selector(tapToSearch), for: .touchUpInside)
+
+        
+        // Set Constraint by Snapkit
+        buttonTapToSearch.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.centerX.equalTo(view.snp.centerX)
+        }
+
+        dashBoardTableView.snp.makeConstraints { make in
+            make.top.equalTo(buttonTapToSearch.snp.bottom).offset(20)
+            make.right.equalTo(view).offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.left.equalTo(view).offset(20)
+        }
+        
+        
+        // Set Constraint by UIKit
+//        NSLayoutConstraint.activate([
+//            buttonTapToSearch.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            buttonTapToSearch.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//
+//            dashBoardTableView.topAnchor.constraint(equalTo: buttonTapToSearch.bottomAnchor, constant: 20),
+//            dashBoardTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+//            dashBoardTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            dashBoardTableView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor)
+//        ])
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.articleList = loadLocal()
+        handleShowTable(counts: articleList.count)
     }
     
     @objc func tapToSearch() {
@@ -98,7 +117,15 @@ class DashBoardViewController: UIViewController {
         return encodeArticleList
     }
     
-    
+    func handleShowTable(counts: Int) {
+        print(counts)
+        if counts == 0 {
+            self.dashBoardTableView.isHidden = true
+        }
+        else {
+            self.dashBoardTableView.isHidden = false
+        }
+    }
 }
 
 //MARK: - UITableViewDataSource

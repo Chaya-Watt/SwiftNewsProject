@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol HistoryDelegate {
     func updateArticleList(articleList:[ArticleAPIData])
@@ -16,7 +17,7 @@ class SearchViewController: UIViewController {
     private let searchFieldNews: UITextField! = {
         let searchFieldNews = UITextField()
         
-        searchFieldNews.translatesAutoresizingMaskIntoConstraints = false
+//        searchFieldNews.translatesAutoresizingMaskIntoConstraints = false
         searchFieldNews.placeholder = "Search News"
         searchFieldNews.font = .systemFont(ofSize: 20)
         searchFieldNews.backgroundColor = .white
@@ -28,7 +29,7 @@ class SearchViewController: UIViewController {
     private let historyListTable: UITableView = {
         let historyListTable = UITableView()
         
-        historyListTable.translatesAutoresizingMaskIntoConstraints = false
+//        historyListTable.translatesAutoresizingMaskIntoConstraints = false
         historyListTable.backgroundColor = .white
         
         return historyListTable
@@ -47,17 +48,6 @@ class SearchViewController: UIViewController {
         view.addSubview(searchFieldNews)
         view.addSubview(historyListTable)
         
-        NSLayoutConstraint.activate([
-            searchFieldNews.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            searchFieldNews.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            searchFieldNews.heightAnchor.constraint(equalToConstant: 50),
-            searchFieldNews.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            historyListTable.topAnchor.constraint(equalTo: searchFieldNews.bottomAnchor, constant:  20),
-            historyListTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            historyListTable.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            historyListTable.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
         
         searchFieldNews.delegate = self
         historyListTable.dataSource = self
@@ -66,10 +56,40 @@ class SearchViewController: UIViewController {
         
         
         historyListTable.register(UINib(nibName: K.CustomTableCell.historyCell, bundle: nil), forCellReuseIdentifier: K.CustomTableCell.historyCell)
+
+        // Create constraints by Snapkit
+        searchFieldNews.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-20)
+            make.height.equalTo(50)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(20)
+        }
+        
+        historyListTable.snp.makeConstraints { make in
+            make.top.equalTo(searchFieldNews.snp.bottom).offset(20)
+            make.right.equalTo(view).offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.left.equalTo(view).offset(20)
+        }
+        
+        // Create constraints by UIKit
+//        NSLayoutConstraint.activate([
+//            searchFieldNews.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+//            searchFieldNews.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+//            searchFieldNews.heightAnchor.constraint(equalToConstant: 50),
+//            searchFieldNews.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//
+//            historyListTable.topAnchor.constraint(equalTo: searchFieldNews.bottomAnchor, constant:  20),
+//            historyListTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+//            historyListTable.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+//            historyListTable.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+//        ])
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.historyList = loadLocal()
+        handleShowTable(counts: historyList.count)
     }
     
     func saveToLocal(_ list: [HistoryModel]) {
@@ -89,6 +109,15 @@ class SearchViewController: UIViewController {
         return encodeHistoryList
     }
     
+    func handleShowTable(counts: Int) {
+        print(counts)
+        if counts == 0 {
+            self.historyListTable.isHidden = true
+        }
+        else {
+            self.historyListTable.isHidden = false
+        }
+    }
 }
 
 //MARK: - UITextFieldDelegate
@@ -138,7 +167,8 @@ extension SearchViewController: NewsAPICallDelegate {
     func updateHistoryTableView(history: HistoryModel) {
         self.historyList.append(history)
         saveToLocal(historyList)
-
+        handleShowTable(counts: historyList.count)
+        
         DispatchQueue.main.async {
             self.historyListTable.reloadData()
         }
