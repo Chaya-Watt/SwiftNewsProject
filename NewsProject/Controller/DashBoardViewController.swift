@@ -26,9 +26,9 @@ class DashBoardViewController: UIViewController {
         dashBoardTableView.register(UINib(nibName: K.CustomTableCell.dashBoardCell, bundle: nil), forCellReuseIdentifier:  K.CustomTableCell.dashBoardCell)
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        self.articleList = loadLocal()
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        handleShowTable(counts: articleList.count)
+    }
     
     @IBAction func tapTpSearch(_ sender: UIButton) {
         performSegue(withIdentifier: K.Segue.goToSearch, sender: self)
@@ -50,23 +50,15 @@ class DashBoardViewController: UIViewController {
         }
     }
     
-//    func saveToLocal(_ list: [ArticleAPIData]) {
-//        let data = list.map { try? JSONEncoder().encode($0)}
-//
-//        defaults.set(data, forKey: K.KeyDataLocal.ArticleList)
-//    }
-    
-//    func loadLocal() -> [ArticleAPIData] {
-//        guard let encodeData = defaults.array(forKey: K.KeyDataLocal.ArticleList) as? [Data] else {
-//            return []
-//        }
-//
-//        let encodeArticleList = encodeData.map { try! JSONDecoder().decode(ArticleAPIData.self, from: $0)}
-//
-//
-//        return encodeArticleList
-//    }
-    
+    func handleShowTable(counts: Int) {
+            print(counts)
+            if counts == 0 {
+                self.dashBoardTableView.isHidden = true
+            }
+            else {
+                self.dashBoardTableView.isHidden = false
+            }
+        }
 }
 
 //MARK: - UITableViewDataSource
@@ -123,7 +115,6 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectArticle = articleList[indexPath.row]
-        print("selectArticle \(selectArticle)")
         self.selectArticle = selectArticle
         
         performSegue(withIdentifier: K.Segue.goToDetail, sender: self)
@@ -135,8 +126,8 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
 extension DashBoardViewController: HistoryDelegate {
     func updateArticleList(articleList: [ArticleAPIData]) {
         self.articleList = articleList
-//        saveToLocal(articleList)
-        
+        handleShowTable(counts: articleList.count)
+
         DispatchQueue.main.async {
             self.dashBoardTableView.reloadData()
         }

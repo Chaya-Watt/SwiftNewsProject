@@ -174,7 +174,16 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstItem="5Iv-S5-zhR" firstAttribute="leading" secondItem="dcB-Aa-Rdm" secondAttribute="leading" constant="10" id="0td-m4-Ec4"/>
+                                    <constraint firstAttribute="trailing" secondItem="5Iv-S5-zhR" secondAttribute="trailing" constant="10" id="3Ma-hs-jTd"/>
+                                    <constraint firstItem="A44-ap-KhH" firstAttribute="leading" secondItem="dcB-Aa-Rdm" secondAttribute="leading" constant="10" id="8R8-3a-mv5"/>
+                                    <constraint firstAttribute="trailing" secondItem="Th4-Hk-6GU" secondAttribute="trailing" constant="10" id="9sB-C7-Qh6"/>
+                                    <constraint firstItem="5Iv-S5-zhR" firstAttribute="top" secondItem="dcB-Aa-Rdm" secondAttribute="top" constant="10" id="X2j-dR-EBW"/>
+                                    <constraint firstItem="Th4-Hk-6GU" firstAttribute="leading" secondItem="dcB-Aa-Rdm" secondAttribute="leading" constant="10" id="Xon-nD-rtW"/>
+                                    <constraint firstAttribute="trailing" secondItem="A44-ap-KhH" secondAttribute="trailing" constant="10" id="ZyO-4A-MpP"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="aGs-f2-E2X"/>
+                                    <constraint firstItem="TeN-Eg-eIW" firstAttribute="leading" secondItem="dcB-Aa-Rdm" secondAttribute="leading" constant="10" id="dzV-Q4-z2m"/>
+                                    <constraint firstAttribute="trailing" secondItem="TeN-Eg-eIW" secondAttribute="trailing" constant="10" id="sVS-9V-I6H"/>
                                 </constraints>
                             </stackView>
                         </subviews>
