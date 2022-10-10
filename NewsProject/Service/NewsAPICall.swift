@@ -9,15 +9,15 @@ import Foundation
 
 protocol NewsAPICallDelegate {
     func updateHistoryTableView(history: HistoryModel)
+    func updateArticlesTableView(articlesList: [ArticleAPIData])
 }
 
 struct NewsAPICall {
-    let newsURL = "https://newsapi.org/v2/everything?from=2022-09-04&sortBy=publishedAt&apiKey=7d785e8a702740a5a85fa236095ec611"
     
     var delegate: NewsAPICallDelegate?
     
-    func fetchNews(searchNews: String) {
-        let urlString = "\(newsURL)&q=\(searchNews)"
+    func fetchNews(searchNews: String, isUpdateHistory: Bool) {
+        let urlString = "\(K.newsUrl)&q=\(searchNews)"
         
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
@@ -29,9 +29,16 @@ struct NewsAPICall {
                     if let wrapData = data {
                         do {
                             let decodeNews = try JSONDecoder().decode(NewsAPIData.self, from: wrapData)
-                            let history = HistoryModel(name: searchNews, status: decodeNews.status, totalResults: decodeNews.totalResults, articles: decodeNews.articles  )
                             
-                            self.delegate?.updateHistoryTableView(history: history)
+                            if isUpdateHistory {
+                                let history = HistoryModel(name: searchNews, totalResults: decodeNews.totalResults)
+                                
+                                self.delegate?.updateHistoryTableView(history: history)
+                            } else {
+                                let articlesList: [ArticleAPIData] = decodeNews.articles
+                                
+                                self.delegate?.updateArticlesTableView(articlesList: articlesList)
+                            }
                         } catch {
                             print(error)
                         }

@@ -48,15 +48,14 @@ class SearchViewController: UIViewController {
     
     func loadLocal() -> [HistoryModel] {
         guard let encodeData = defaults.array(forKey: K.KeyDataLocal.HistoryList) as? [Data] else {
-           return []
+            return []
         }
         
         let encodeHistoryList = encodeData.map { try! JSONDecoder().decode(HistoryModel.self, from: $0)}
         
- 
+        
         return encodeHistoryList
     }
-    
 }
 
 //MARK: - UITextFieldDelegate
@@ -67,7 +66,7 @@ extension SearchViewController: UITextFieldDelegate {
             print("Pls Enter Keyword News")
             return false
         }
-        newsAPI.fetchNews(searchNews: wrapTextField)
+        newsAPI.fetchNews(searchNews: wrapTextField,isUpdateHistory: true)
         searchNews.text = ""
         return true
     }
@@ -89,18 +88,27 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)  {
         let selectHistory = historyList[indexPath.row]
-                
-        delegate?.updateArticleList(articleList: selectHistory.articles)
-        navigationController?.popViewController(animated: true)
-        dismiss(animated: true,completion: nil)
+        print(selectHistory)
+        
+        newsAPI.fetchNews(searchNews: selectHistory.name,isUpdateHistory: false)
     }
 }
 
 //MARK: - NewsAPICallDelegate
 
 extension SearchViewController: NewsAPICallDelegate {
+    func updateArticlesTableView(articlesList: [ArticleAPIData]) {
+        delegate?.updateArticleList(articleList: articlesList)
+        
+        DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true,completion: nil)
+        }
+        
+    }
+    
     func updateHistoryTableView(history: HistoryModel) {
         self.historyList.append(history)
         saveToLocal(historyList)

@@ -70,7 +70,7 @@
                     <navigationItem key="navigationItem" id="F0s-I4-bLP"/>
                     <connections>
                         <outlet property="dashBoardTableView" destination="YJv-0N-fBP" id="5z6-ja-i8g"/>
-                        <segue destination="Ex1-Pj-XN0" kind="show" identifier="goToSearch" id="yf0-rO-WeB"/>
+                        <segue destination="Ex1-Pj-XN0" kind="presentation" identifier="goToSearch" id="yf0-rO-WeB"/>
                         <segue destination="Jxb-Du-vWB" kind="show" identifier="goToDetail" id="KA4-fZ-omc"/>
                     </connections>
                 </viewController>
@@ -83,11 +83,11 @@
             <objects>
                 <viewController id="Ex1-Pj-XN0" customClass="SearchViewController" customModule="NewsProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WYP-Hb-MA3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="M4U-cl-bBu">
-                                <rect key="frame" x="10" y="98" width="394" height="754"/>
+                                <rect key="frame" x="10" y="54" width="394" height="778"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Your News" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Pc-U7-yde">
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="50"/>
@@ -98,7 +98,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aVn-Qu-LzR">
-                                        <rect key="frame" x="0.0" y="100" width="394" height="654"/>
+                                        <rect key="frame" x="0.0" y="100" width="394" height="678"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>

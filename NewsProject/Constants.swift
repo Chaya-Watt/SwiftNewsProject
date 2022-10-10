@@ -1,4 +1,6 @@
 struct K {
+    static let newsUrl = "https://newsapi.org/v2/everything?sortBy=publishedAt&apiKey=7d785e8a702740a5a85fa236095ec611"
+    
     struct CustomTableCell {
         static let dashBoardCell = "DashBoardTableViewCell"
         static let historyCell = "HistoryTableViewCell"
