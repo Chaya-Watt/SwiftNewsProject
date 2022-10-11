@@ -14,7 +14,6 @@ class DetailViewController: UIViewController {
     private let imageArticle: UIImageView = {
         let imageArticle = UIImageView()
         
-//        imageArticle.translatesAutoresizingMaskIntoConstraints = false
         imageArticle.contentMode = .scaleToFill
         imageArticle.backgroundColor = .gray
         
@@ -24,16 +23,14 @@ class DetailViewController: UIViewController {
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .white
         
-       return scrollView
+        return scrollView
     }()
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 15
         
@@ -45,7 +42,6 @@ class DetailViewController: UIViewController {
         
         titleArticle.numberOfLines = 0
         titleArticle.sizeToFit()
-//        titleArticle.translatesAutoresizingMaskIntoConstraints = false
         
         return titleArticle
     }()
@@ -55,7 +51,6 @@ class DetailViewController: UIViewController {
         
         descriptionArticle.numberOfLines = 0
         descriptionArticle.sizeToFit()
-//        descriptionArticle.translatesAutoresizingMaskIntoConstraints = false
         
         return descriptionArticle
     }()
@@ -63,7 +58,6 @@ class DetailViewController: UIViewController {
     private let dateArticle: UILabel! = {
         let dateArticle = UILabel()
         
-//        dateArticle.translatesAutoresizingMaskIntoConstraints = false
         dateArticle.numberOfLines = 1
         dateArticle.sizeToFit()
         
@@ -74,10 +68,9 @@ class DetailViewController: UIViewController {
         let sourceArticle = UIButton()
         
         sourceArticle.setTitle("Source", for: .normal)
-//        sourceArticle.translatesAutoresizingMaskIntoConstraints = false
         sourceArticle.titleLabel?.font = .systemFont(ofSize: 24, weight: .bold)
         sourceArticle.sizeToFit()
-        sourceArticle.backgroundColor = .cyan
+        sourceArticle.backgroundColor = .systemCyan
         
         return sourceArticle
     }()
@@ -127,26 +120,6 @@ class DetailViewController: UIViewController {
             make.left.equalTo(scrollView.snp.left).offset(10)
             make.width.equalTo(scrollView.snp.width).offset(-20)
         }
-        
-        
-        // Create constraint by UIKit
-//        NSLayoutConstraint.activate([
-//            imageArticle.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor,constant: 10),
-//            imageArticle.heightAnchor.constraint(equalToConstant: 200),
-//            imageArticle.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-//            imageArticle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//
-//            scrollView.topAnchor.constraint(equalTo: imageArticle.bottomAnchor, constant: 20),
-//            scrollView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
-//
-//            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
-//            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor,constant: 10),
-//            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,constant: 10),
-//            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-//            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor,constant: -20),
-//        ])
     }
     
     func renderImage() {
@@ -169,11 +142,11 @@ class DetailViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "TH")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         let date = dateFormatter.date(from: dateString!)
-
+        
         if let date = date {
             dateFormatter.dateFormat = "dd MMM yyyy"
             let resultDate = dateFormatter.string(from: date)
-
+            
             return resultDate
         }
         else {
