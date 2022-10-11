@@ -122,26 +122,14 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = dashBoardTableView.dequeueReusableCell(withIdentifier: K.CustomTableCell.dashBoardCell, for: indexPath) as? DashBoardTableViewCell {
             let article = articleList[indexPath.row]
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "TH")
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            let date = dateFormatter.date(from: article.publishedAt!)
-            
-            if let date = date {
-                dateFormatter.dateFormat = "dd MMM yyyy"
-                let resultDate = dateFormatter.string(from: date)
-                
-                cell.date.text = resultDate
-            }
-            
+                        
             cell.titleNews.text = article.title ?? ""
             cell.descriptionNews.text = article.description ?? ""
             cell.urlSource = article.url
             cell.delegate = self
             cell.separatorInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
             cell.layer.cornerRadius = 10
-            
+            cell.date.text = article.publishedAt?.formatThaiDate()
             
             if let imageURL = URL(string: article.urlToImage ?? "") {
                 let task = URLSession.shared.dataTask(with: imageURL) { data, response, error in

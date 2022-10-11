@@ -15,4 +15,10 @@ struct K {
         static let HistoryList = "historyList"
         static let ArticleList = "articleList"
     }
+    
+    struct FormatDate {
+        static let resultFormat = "dd MMM yy"
+        static let orginalFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        static let localIdentifier = "th-TH"
+    }
 }

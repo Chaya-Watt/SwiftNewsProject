@@ -95,7 +95,7 @@ class DetailViewController: UIViewController {
         
         titleArticle.text = titleData
         descriptionArticle.text = descriptionData
-        dateArticle.text = displayFormatDate(dateString: dateData)
+        dateArticle.text = dateData?.formatThaiDate()
         renderImage()
         sourceArticle.addTarget(self, action: #selector(onPressSource), for: .touchUpInside)
         
@@ -146,24 +146,6 @@ class DetailViewController: UIViewController {
             task.resume()
         }
     }
-    
-    func displayFormatDate (dateString:String?) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "TH")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let date = dateFormatter.date(from: dateString!)
-        
-        if let date = date {
-            dateFormatter.dateFormat = "dd MMM yyyy"
-            let resultDate = dateFormatter.string(from: date)
-            
-            return resultDate
-        }
-        else {
-            return ""
-        }
-    }
-    
     
     @objc func onPressSource() {
         if let wrapSourceURL = sourceURLData {
