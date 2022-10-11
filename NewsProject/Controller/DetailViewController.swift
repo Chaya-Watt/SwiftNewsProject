@@ -27,7 +27,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         titleArticle.text = titleData
         descriptionArticle.text = descriptionData
-        dateArticle.text = dateData
+        dateArticle.text = dateData?.formatThaiDate()
         renderImage()
     }
     
