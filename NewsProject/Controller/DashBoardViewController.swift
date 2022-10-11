@@ -59,7 +59,7 @@ class DashBoardViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        self.articleList = loadLocal()
+        self.articleList = loadLocal()
         handleShowTable(counts: articleList.count)
     }
     
@@ -83,22 +83,22 @@ class DashBoardViewController: UIViewController {
         }
     }
     
-//    func saveToLocal(_ list: [ArticleAPIData]) {
-//        let data = list.map { try? JSONEncoder().encode($0)}
-//
-//        defaults.set(data, forKey: K.KeyDataLocal.ArticleList)
-//    }
-//
-//    func loadLocal() -> [ArticleAPIData] {
-//        guard let encodeData = defaults.array(forKey: K.KeyDataLocal.ArticleList) as? [Data] else {
-//            return []
-//        }
-//
-//        let encodeArticleList = encodeData.map { try! JSONDecoder().decode(ArticleAPIData.self, from: $0)}
-//
-//
-//        return encodeArticleList
-//    }
+    func saveToLocal(_ list: [ArticleAPIData]) {
+        let data = list.map { try? JSONEncoder().encode($0)}
+
+        defaults.set(data, forKey: K.KeyDataLocal.ArticleList)
+    }
+
+    func loadLocal() -> [ArticleAPIData] {
+        guard let encodeData = defaults.array(forKey: K.KeyDataLocal.ArticleList) as? [Data] else {
+            return []
+        }
+
+        let encodeArticleList = encodeData.map { try! JSONDecoder().decode(ArticleAPIData.self, from: $0)}
+
+
+        return encodeArticleList
+    }
     
     func handleShowTable(counts: Int) {
         print(counts)
@@ -178,7 +178,7 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
 extension DashBoardViewController: HistoryDelegate {
     func updateArticleList(articleList: [ArticleAPIData]) {
         self.articleList = articleList
-//        saveToLocal(articleList)
+        saveToLocal(articleList)
         handleShowTable(counts: articleList.count)
         
         DispatchQueue.main.async {

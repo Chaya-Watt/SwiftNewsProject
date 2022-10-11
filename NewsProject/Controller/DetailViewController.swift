@@ -22,9 +22,6 @@ class DetailViewController: UIViewController {
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        
-        scrollView.backgroundColor = .white
-        
         return scrollView
     }()
     
@@ -33,6 +30,7 @@ class DetailViewController: UIViewController {
         
         stackView.axis = .vertical
         stackView.spacing = 15
+        stackView.backgroundColor = .white
         
         return stackView
     }()
@@ -42,6 +40,7 @@ class DetailViewController: UIViewController {
         
         titleArticle.numberOfLines = 0
         titleArticle.sizeToFit()
+        titleArticle.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         return titleArticle
     }()
@@ -51,6 +50,7 @@ class DetailViewController: UIViewController {
         
         descriptionArticle.numberOfLines = 0
         descriptionArticle.sizeToFit()
+        descriptionArticle.font = .systemFont(ofSize: 16, weight: .regular)
         
         return descriptionArticle
     }()
@@ -60,6 +60,7 @@ class DetailViewController: UIViewController {
         
         dateArticle.numberOfLines = 1
         dateArticle.sizeToFit()
+        dateArticle.textColor = .gray
         
         return dateArticle
     }()
@@ -70,7 +71,7 @@ class DetailViewController: UIViewController {
         sourceArticle.setTitle("Source", for: .normal)
         sourceArticle.titleLabel?.font = .systemFont(ofSize: 24, weight: .bold)
         sourceArticle.sizeToFit()
-        sourceArticle.backgroundColor = .systemCyan
+        sourceArticle.setTitleColor(.systemCyan, for: .normal)
         
         return sourceArticle
     }()
@@ -98,7 +99,6 @@ class DetailViewController: UIViewController {
         renderImage()
         sourceArticle.addTarget(self, action: #selector(onPressSource), for: .touchUpInside)
         
-        //Create constraint by snap kit
         imageArticle.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.right.equalTo(view).offset(-20)
@@ -114,11 +114,21 @@ class DetailViewController: UIViewController {
         }
         
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(10)
-            make.right.equalTo(scrollView.snp.right).offset(-10)
-            make.bottom.equalTo(scrollView.snp.bottom).offset(-10)
-            make.left.equalTo(scrollView.snp.left).offset(10)
-            make.width.equalTo(scrollView.snp.width).offset(-20)
+            make.top.equalTo(scrollView)
+            make.right.equalTo(scrollView)
+            make.left.equalTo(scrollView)
+            make.width.equalTo(scrollView)
+        }
+        
+        titleArticle.snp.makeConstraints { make in
+            make.top.equalTo(stackView).offset(10)
+            make.left.equalTo(stackView).offset(10)
+            make.right.equalTo(stackView).offset(-10)
+        }
+        
+        sourceArticle.snp.makeConstraints { make in
+            make.width.equalTo(stackView.snp.width).offset(-20)
+            make.bottom.equalTo(stackView).offset(-10)
         }
     }
     
