@@ -20,7 +20,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="F0s-I4-bLP"/>
                     <connections>
-                        <segue destination="Ex1-Pj-XN0" kind="show" identifier="goToSearch" id="yf0-rO-WeB"/>
+                        <segue destination="Ex1-Pj-XN0" kind="presentation" identifier="goToSearch" id="yf0-rO-WeB"/>
                         <segue destination="Jxb-Du-vWB" kind="show" identifier="goToDetail" id="KA4-fZ-omc"/>
                     </connections>
                 </viewController>
@@ -33,7 +33,7 @@
             <objects>
                 <viewController id="Ex1-Pj-XN0" customClass="SearchViewController" customModule="NewsProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WYP-Hb-MA3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="PHI-Kn-5ry"/>
                         <color key="backgroundColor" systemColor="systemCyanColor"/>
