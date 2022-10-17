@@ -59,7 +59,7 @@ class DashBoardViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.articleList = loadLocal()
+        //        self.articleList = loadLocal()
         handleShowTable(counts: articleList.count)
     }
     
@@ -85,18 +85,18 @@ class DashBoardViewController: UIViewController {
     
     func saveToLocal(_ list: [ArticleAPIData]) {
         let data = list.map { try? JSONEncoder().encode($0)}
-
+        
         defaults.set(data, forKey: K.KeyDataLocal.ArticleList)
     }
-
+    
     func loadLocal() -> [ArticleAPIData] {
         guard let encodeData = defaults.array(forKey: K.KeyDataLocal.ArticleList) as? [Data] else {
             return []
         }
-
+        
         let encodeArticleList = encodeData.map { try! JSONDecoder().decode(ArticleAPIData.self, from: $0)}
-
-
+        
+        
         return encodeArticleList
     }
     
@@ -122,7 +122,7 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = dashBoardTableView.dequeueReusableCell(withIdentifier: K.CustomTableCell.dashBoardCell, for: indexPath) as? DashBoardTableViewCell {
             let article = articleList[indexPath.row]
-                        
+            
             cell.titleNews.text = article.title ?? ""
             cell.descriptionNews.text = article.description ?? ""
             cell.urlSource = article.url
@@ -164,9 +164,9 @@ extension DashBoardViewController: UITableViewDataSource, UITableViewDelegate {
 //MARK: - HistoryDelegate
 
 extension DashBoardViewController: HistoryDelegate {
-    func updateArticleList(articleList: [ArticleAPIData]) {
+    func updateArticleList(articleList: [ArticleAPIData]) async {
         self.articleList = articleList
-        saveToLocal(articleList)
+        //        saveToLocal(articleList)
         handleShowTable(counts: articleList.count)
         
         DispatchQueue.main.async {

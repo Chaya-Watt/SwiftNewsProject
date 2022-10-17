@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 protocol HistoryDelegate {
-    func updateArticleList(articleList:[ArticleAPIData])
+    func updateArticleList(articleList:[ArticleAPIData]) async
 }
 
 class SearchViewController: UIViewController {
@@ -147,11 +147,13 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension SearchViewController: NewsAPICallDelegate {
     func updateArticlesTableView(articlesList: [ArticleAPIData]) {
-        delegate?.updateArticleList(articleList: articlesList)
-        
-        DispatchQueue.main.async {
-            self.navigationController?.popViewController(animated: true)
-            self.dismiss(animated: true,completion: nil)
+        Task {
+            await delegate?.updateArticleList(articleList: articlesList)
+            
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+                self.dismiss(animated: true,completion: nil)
+            }
         }
     }
     
